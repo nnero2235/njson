@@ -29,7 +29,7 @@ public class NJson {
      * @param <T>
      * @return
      */
-    public static <T> T fromJsonString(String json){
+    public static <T> T fromJsonString(String json,Class<T> clazz){
         //TODO:将json字符串 转化为 一个对象
         return null;
     }
