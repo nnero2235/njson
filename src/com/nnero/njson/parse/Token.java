@@ -13,39 +13,53 @@ package com.nnero.njson.parse;
  */
 public class Token {
     //token type
-    enum Type{
-        OBJ,
-        ARR,
-        NUMBER,
-        STRING,
-        NULL,
-        TRUE,
-        FALSE
+    public enum Type{
+        L_BRACE, R_BRACE, L_BRACKET, R_BRACKET, //{} []
+        COMMA, QUOT, COLON,  //,":
+        EOF, SPECIAL, //这2个并非实际存在 只是一种标志
+        NUMBER, STRING, NULL, TRUE, FALSE //值
     }
 
     private Type mType;
-    private String mEntity;
+    private String mValue;
 
-    private Token(Type type,String entity){
+    private Token(Type type,String value){
         this.mType = type;
-        this.mEntity = entity;
+        this.mValue = value;
     }
 
     public Type getType() {
         return mType;
     }
 
-    public String getEntity() {
-        return mEntity;
+    public String getValue() {
+        return mValue;
     }
 
     /**
-     * 创建token 只能通过该方法
+     * 创建token 有值情况
      * @param type
-     * @param entity
+     * @param value
      * @return
      */
-    public static Token createToken(Type type,String entity){
-        return new Token(type,entity);
+    public static Token createToken(Type type,String value){
+        return new Token(type,value);
+    }
+
+    /**
+     * 创建token 无值情况
+     * @param type
+     * @return
+     */
+    public static Token createToken(Type type){
+        return new Token(type,null);
+    }
+
+    @Override
+    public String toString() {
+        if(mValue != null)
+            return "<"+mType+","+mValue+">";
+        else
+            return "<"+mType+">";
     }
 }
