@@ -1,5 +1,5 @@
 #json的文法
-gammar:json
+grammar:json
 
 @token:
     L_BRACE '{'

@@ -26,4 +26,11 @@ public interface Lexer {
      * @param state 状态
      */
     void checkoutState(int state);
+
+    /**
+     * 根据token类型返回 对应字符
+     * @param type
+     * @return
+     */
+    String getTokenString(Token.Type type);
 }

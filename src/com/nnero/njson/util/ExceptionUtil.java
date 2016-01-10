@@ -1,5 +1,6 @@
 package com.nnero.njson.util;
 
+import com.nnero.njson.parse.exception.JSONGrammarException;
 import com.nnero.njson.parse.exception.JSONTokenException;
 
 /**
@@ -33,7 +34,17 @@ public class ExceptionUtil {
         } else if(type == JSONTokenException.Type.NOT_EXISTS){
             return String.format(JSONTokenException.NOT_EXISTS_EXCEPTION,msg);
         } else {
-            return "ERROR:JSONException!";
+            return "ERROR:JSONTokenException!";
+        }
+    }
+
+    public static String createJSONGrammarExceptionMsg(JSONGrammarException.Type type,String msg){
+        if(type == JSONGrammarException.Type.NOT_JSON_OBJ){
+            return String.format("source json is not jsonObj,start char invalid");
+        } else if(type == JSONGrammarException.Type.NOT_JSON_ARR){
+            return String.format("source json is not jsonArray , start char invalid");
+        } else {
+            return "ERROR:JSONGrammarException";
         }
     }
 }

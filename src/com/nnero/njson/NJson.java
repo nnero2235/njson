@@ -1,5 +1,10 @@
 package com.nnero.njson;
 
+import com.nnero.njson.parse.JSONLexer;
+import com.nnero.njson.parse.JSONParser;
+import com.nnero.njson.parse.exception.JSONGrammarException;
+import com.nnero.njson.parse.exception.JSONTokenException;
+
 /**
  * **********************************************
  * <p/>
@@ -39,8 +44,9 @@ public class NJson {
      * @param json
      * @return
      */
-    public static JSONObject getJsonObj(String json){
-        return null;
+    public static JSONObject getJsonObj(String json) throws JSONGrammarException, JSONTokenException {
+        JSONParser parser = new JSONParser(new JSONLexer(json));
+        return parser.parseObj();
     }
 
     /**
@@ -48,7 +54,8 @@ public class NJson {
      * @param json
      * @return
      */
-    public static JSONArray getJsonArray(String json){
-        return null;
+    public static JSONArray getJsonArray(String json) throws JSONTokenException, JSONGrammarException {
+        JSONParser parser = new JSONParser(new JSONLexer(json));
+        return parser.parseArr();
     }
 }

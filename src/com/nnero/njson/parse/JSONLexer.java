@@ -1,7 +1,10 @@
 package com.nnero.njson.parse;
 
+import com.nnero.njson.parse.Token.Type;
 import com.nnero.njson.parse.exception.JSONTokenException;
 import com.nnero.njson.util.ExceptionUtil;
+
+import static com.nnero.njson.parse.Token.Type.*;
 
 /**
  * **********************************************
@@ -33,13 +36,37 @@ public class JSONLexer implements Lexer {
         this.mState = STATE_NORMAL;
     }
 
-    /**
-     * 切换状态
-     * @param state 状态机状态
-     */
     @Override
     public void checkoutState(int state){
         mState = state;
+    }
+
+    @Override
+    public String getTokenString(Type type) {
+        switch (type){
+        case L_BRACE:
+            return "{";
+        case R_BRACE:
+            return "}";
+        case L_BRACKET:
+            return "[";
+        case R_BRACKET:
+            return "]";
+        case COLON:
+            return ":";
+        case COMMA:
+            return ",";
+        case QUOT:
+            return "\"";
+        case NULL:
+            return "null";
+        case TRUE:
+            return "true";
+        case FALSE:
+            return "false";
+        default:
+            return "no token content";
+        }
     }
 
     @Override
@@ -61,36 +88,36 @@ public class JSONLexer implements Lexer {
                 next();
             } else if(mChar == '{') {
                 next();
-                return Token.createToken(Token.Type.L_BRACE);
+                return Token.createToken(L_BRACE);
             } else if(mChar == '}') {
                 next();
-                return Token.createToken(Token.Type.R_BRACE);
+                return Token.createToken(Type.R_BRACE);
             } else if(mChar == '\"') {
                 next();
-                return Token.createToken(Token.Type.QUOT);
+                return Token.createToken(Type.QUOT);
             } else if(mChar == ':') {
                 next();
-                return Token.createToken(Token.Type.COLON);
+                return Token.createToken(Type.COLON);
             } else if(mChar == ',') {
                 next();
-                return Token.createToken(Token.Type.COMMA);
+                return Token.createToken(Type.COMMA);
             } else if(mChar == '[') {
                 next();
-                return Token.createToken(Token.Type.L_BRACKET);
+                return Token.createToken(Type.L_BRACKET);
             } else if(mChar == ']') {
                 next();
-                return Token.createToken(Token.Type.R_BRACKET);
+                return Token.createToken(Type.R_BRACKET);
             } else if(mChar == 'f' || mChar == 't' || mChar == 'n') {
-                return Token.createToken(Token.Type.SPECIAL);
+                return Token.createToken(Type.SPECIAL);
             } else if(Character.isDigit(mChar)) {
-                Token token = Token.createToken(Token.Type.NUMBER, String.valueOf(mChar));
+                Token token = Token.createToken(Type.NUMBER, String.valueOf(mChar));
                 next();
                 return token;
             } else {
                 throw new JSONTokenException(ExceptionUtil.createJSONTokenExceptionMsg(JSONTokenException.Type.INVALID_CHAR, String.valueOf(mChar)));
             }
         }
-        return Token.createToken(Token.Type.EOF);
+        return Token.createToken(Type.EOF);
     }
 
     private Token nextStringToken() throws JSONTokenException {
@@ -99,7 +126,7 @@ public class JSONLexer implements Lexer {
             if(mChar == '\"'){
                 next();
                 mState = STATE_NORMAL;
-                return Token.createToken(Token.Type.STRING,sb.toString());
+                return Token.createToken(Type.STRING,sb.toString());
             } else {
                 sb.append(mChar);
             }
@@ -118,7 +145,7 @@ public class JSONLexer implements Lexer {
             }
             if("true".equals(sb.toString())){
                 mState = STATE_NORMAL;
-                return Token.createToken(Token.Type.TRUE,"true");
+                return Token.createToken(Type.TRUE,"true");
             } else {
                 throw new JSONTokenException(ExceptionUtil.createJSONTokenExceptionMsg(
                         JSONTokenException.Type.INVALID_TRUE,sb.toString()));
@@ -149,7 +176,7 @@ public class JSONLexer implements Lexer {
             }
             if("false".equals(sb.toString())){
                 mState = STATE_NORMAL;
-                return Token.createToken(Token.Type.FALSE,"false");
+                return Token.createToken(Type.FALSE,"false");
             } else {
                 throw new JSONTokenException(ExceptionUtil.createJSONTokenExceptionMsg(
                         JSONTokenException.Type.INVALID_FALSE,sb.toString()));
@@ -168,7 +195,7 @@ public class JSONLexer implements Lexer {
             }
             if ("null".equals(sb.toString())) {
                 mState = STATE_NORMAL;
-                return Token.createToken(Token.Type.NULL, "null");
+                return Token.createToken(Type.NULL, "null");
             } else {
                 throw new JSONTokenException(ExceptionUtil.createJSONTokenExceptionMsg(
                         JSONTokenException.Type.INVALID_NULL, sb.toString()));

@@ -1,5 +1,7 @@
 package com.nnero.njson.parse;
 
+import com.nnero.njson.parse.exception.JSONTokenException;
+
 /**
  * **********************************************
  * <p/>
@@ -17,9 +19,10 @@ public abstract class Parser {
     protected Token[] mLookahead;
     protected int mLookaheadIndex;
 
-    public Parser(Lexer input,int lookaheadNumber){
+    public Parser(Lexer input,int lookaheadNumber) {
         this.mInput = input;
         this.mLookahead = new Token[lookaheadNumber];
         this.mLookaheadIndex = 0;
     }
+
 }
