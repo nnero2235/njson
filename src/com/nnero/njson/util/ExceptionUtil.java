@@ -1,6 +1,6 @@
 package com.nnero.njson.util;
 
-import com.nnero.njson.parse.JSONTokenException;
+import com.nnero.njson.parse.exception.JSONTokenException;
 
 /**
  * **********************************************

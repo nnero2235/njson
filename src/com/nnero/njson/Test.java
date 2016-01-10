@@ -1,8 +1,7 @@
 package com.nnero.njson;
 
 import com.nnero.njson.parse.JSONLexer;
-import com.nnero.njson.parse.JSONTokenException;
-import com.nnero.njson.parse.Lexer;
+import com.nnero.njson.parse.exception.JSONTokenException;
 import com.nnero.njson.parse.Token;
 
 /**
@@ -34,9 +33,9 @@ public class Test {
                 System.out.println(token.toString());
                 break;
             } else if(token.getType() == Token.Type.QUOT){
-                lexer.exchangeState(JSONLexer.State.STRING);
+                lexer.checkoutState(JSONLexer.STATE_STRING);
             } else if(token.getType() == Token.Type.SPECIAL){
-                lexer.exchangeState(JSONLexer.State.SPECIAL);
+                lexer.checkoutState(JSONLexer.STATE_SPECIAL);
             }
             System.out.println(token.toString());
         }

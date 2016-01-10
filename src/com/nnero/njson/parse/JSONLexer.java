@@ -1,5 +1,6 @@
 package com.nnero.njson.parse;
 
+import com.nnero.njson.parse.exception.JSONTokenException;
 import com.nnero.njson.util.ExceptionUtil;
 
 /**
@@ -15,13 +16,11 @@ import com.nnero.njson.util.ExceptionUtil;
  */
 public class JSONLexer implements Lexer {
 
-    public enum State{
-        NORMAL,
-        STRING,
-        SPECIAL
-    }
+    public static final int STATE_NORMAL = 1;
+    public static final int STATE_STRING = 2;
+    public static final int STATE_SPECIAL = 3;
 
-    private State mState;
+    private int mState;
     private String mInput;
     private char mChar;
     private int mIndex;
@@ -31,24 +30,25 @@ public class JSONLexer implements Lexer {
         this.mInput = input;
         this.mLength = input.length();
         this.mChar = mInput.charAt(0);
-        this.mState = State.NORMAL;
+        this.mState = STATE_NORMAL;
     }
 
     /**
      * 切换状态
      * @param state 状态机状态
      */
-    public void exchangeState(State state){
+    @Override
+    public void checkoutState(int state){
         mState = state;
     }
 
     @Override
     public Token nextToken() throws JSONTokenException {
-        if(mState == State.NORMAL){
+        if(mState == STATE_NORMAL){
             return nextNormalToken();
-        } else if(mState == State.STRING){
+        } else if(mState == STATE_STRING){
             return nextStringToken();
-        } else if(mState == State.SPECIAL) {
+        } else if(mState == STATE_SPECIAL) {
             return nextSpecialToken();
         } else {
             throw new RuntimeException("no state of jsonlexer");
@@ -98,7 +98,7 @@ public class JSONLexer implements Lexer {
         while (mIndex<mLength){
             if(mChar == '\"'){
                 next();
-                mState = State.NORMAL;
+                mState = STATE_NORMAL;
                 return Token.createToken(Token.Type.STRING,sb.toString());
             } else {
                 sb.append(mChar);
@@ -117,7 +117,7 @@ public class JSONLexer implements Lexer {
                 next();
             }
             if("true".equals(sb.toString())){
-                mState = State.NORMAL;
+                mState = STATE_NORMAL;
                 return Token.createToken(Token.Type.TRUE,"true");
             } else {
                 throw new JSONTokenException(ExceptionUtil.createJSONTokenExceptionMsg(
@@ -148,7 +148,7 @@ public class JSONLexer implements Lexer {
                 next();
             }
             if("false".equals(sb.toString())){
-                mState = State.NORMAL;
+                mState = STATE_NORMAL;
                 return Token.createToken(Token.Type.FALSE,"false");
             } else {
                 throw new JSONTokenException(ExceptionUtil.createJSONTokenExceptionMsg(
@@ -167,7 +167,7 @@ public class JSONLexer implements Lexer {
                 next();
             }
             if ("null".equals(sb.toString())) {
-                mState = State.NORMAL;
+                mState = STATE_NORMAL;
                 return Token.createToken(Token.Type.NULL, "null");
             } else {
                 throw new JSONTokenException(ExceptionUtil.createJSONTokenExceptionMsg(

@@ -1,4 +1,4 @@
-package com.nnero.njson.parse;
+package com.nnero.njson.parse.exception;
 
 /**
  * **********************************************
