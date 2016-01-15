@@ -75,8 +75,6 @@ public class JSONLexer implements Lexer {
             return nextNormalToken();
         } else if(mState == STATE_STRING){
             return nextStringToken();
-        } else if(mState == STATE_SPECIAL) {
-            return nextSpecialToken();
         } else {
             throw new RuntimeException("no state of jsonlexer");
         }
@@ -93,6 +91,7 @@ public class JSONLexer implements Lexer {
                 next();
                 return Token.createToken(Type.R_BRACE);
             } else if(mChar == '\"') {
+                mState = STATE_STRING;
                 next();
                 return Token.createToken(Type.QUOT);
             } else if(mChar == ':') {
@@ -108,11 +107,9 @@ public class JSONLexer implements Lexer {
                 next();
                 return Token.createToken(Type.R_BRACKET);
             } else if(mChar == 'f' || mChar == 't' || mChar == 'n') {
-                return Token.createToken(Type.SPECIAL);
+                return nextSpecialToken();
             } else if(Character.isDigit(mChar)) {
-                Token token = Token.createToken(Type.NUMBER, String.valueOf(mChar));
-                next();
-                return token;
+                return nextNumberToken();
             } else {
                 throw new JSONTokenException(ExceptionUtil.createJSONTokenExceptionMsg(JSONTokenException.Type.INVALID_CHAR, String.valueOf(mChar)));
             }
@@ -205,6 +202,14 @@ public class JSONLexer implements Lexer {
                 JSONTokenException.Type.NOT_COMPLETE, "value : null"));
     }
 
+    private Token nextNumberToken(){
+        StringBuilder sb = new StringBuilder();
+        do{
+            sb.append(mChar);
+            next();
+        }while (Character.isDigit(mChar));
+        return Token.createToken(Type.NUMBER,sb.toString());
+    }
 
     //下一个字符
     private void next(){

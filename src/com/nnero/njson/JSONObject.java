@@ -1,5 +1,8 @@
 package com.nnero.njson;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * **********************************************
  * <p/>
@@ -12,6 +15,12 @@ package com.nnero.njson;
  * ************************************************
  */
 public class JSONObject {
+
+    private Map<String,String> map;
+
+    public JSONObject(){
+        map = new HashMap<String, String>();
+    }
 
     /**
      * 根据name 获得jsonobj
@@ -37,7 +46,7 @@ public class JSONObject {
      * @return
      */
     public String getString(String name){
-        return null;
+        return checkNull(name);
     }
 
     /**
@@ -46,7 +55,24 @@ public class JSONObject {
      * @return
      */
     public int getInt(String name){
-      return 0;
+        int value = Integer.parseInt(checkNull(name));
+        return value;
     }
 
+    public boolean getBoolean(String name){
+        boolean b = Boolean.valueOf(checkNull(name));
+        return b;
+    }
+
+    public void put(String name,String value){
+        map.put(name,value);
+    }
+
+    private String checkNull(String name){
+        if ("null".equals(map.get(name))){
+            return null;
+        } else {
+            return map.get(name);
+        }
+    }
 }

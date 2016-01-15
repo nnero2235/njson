@@ -1,6 +1,7 @@
 package com.nnero.njson;
 
 import com.nnero.njson.parse.JSONLexer;
+import com.nnero.njson.parse.exception.JSONGrammarException;
 import com.nnero.njson.parse.exception.JSONTokenException;
 import com.nnero.njson.parse.Token;
 
@@ -16,8 +17,9 @@ import com.nnero.njson.parse.Token;
  * ************************************************
  */
 public class Test {
-    public static void main(String[] args) throws JSONTokenException {
-        testLexer();
+    public static void main(String[] args) throws JSONTokenException, JSONGrammarException {
+//        testLexer();
+        testParser();
     }
 
     private static void testLexer() throws JSONTokenException {
@@ -26,7 +28,8 @@ public class Test {
                 "    {\"StudentID\":  100   ,\"Name\":null,\"Hometown\":\"china\"},\n" +
                 "    {\"StudentID\": 101,\"isName\":false,\"isHometown\": true  }\n" +
                 "]";
-        JSONLexer lexer = new JSONLexer(json1);
+        String json2 = "{\"StudentID\":100,\"Name\":null,\"Hometown\":\"china\",\"boolean\":false,\"nnero\":true}";
+        JSONLexer lexer = new JSONLexer(json2);
         Token token = null;
         while ((token = lexer.nextToken()) != null){
             if(token.getType() == Token.Type.EOF){
@@ -39,6 +42,16 @@ public class Test {
             }
             System.out.println(token.toString());
         }
+    }
+
+    private static void testParser() throws JSONTokenException, JSONGrammarException {
+        String json = "{\"StudentID\":100,\"Name\":null,\"Hometown\":\"china\",\"boolean\":false,\"nnero\":true}";
+        JSONObject obj = NJson.getJsonObj(json);
+        System.out.println(obj.getInt("StudentID"));
+//        System.out.println(obj.getInt("Name"));
+        System.out.println(obj.getString("Hometown"));
+        System.out.println(obj.getBoolean("boolean"));
+        System.out.println(obj.getBoolean("nnero"));
     }
 
 }
