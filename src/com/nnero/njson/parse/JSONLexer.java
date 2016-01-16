@@ -37,11 +37,6 @@ public class JSONLexer implements Lexer {
     }
 
     @Override
-    public void checkoutState(int state){
-        mState = state;
-    }
-
-    @Override
     public String getTokenString(Type type) {
         switch (type){
         case L_BRACE:
@@ -82,7 +77,7 @@ public class JSONLexer implements Lexer {
 
     private Token nextNormalToken() throws JSONTokenException {
         while (mIndex < mLength) {
-            if(mChar == ' '||mChar == '\t' || mChar == '\n' || mChar == '\b') {
+            if(mChar == ' '||mChar == '\t' || mChar == '\n' || mChar == '\r') {
                 next();
             } else if(mChar == '{') {
                 next();

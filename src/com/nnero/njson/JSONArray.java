@@ -1,5 +1,8 @@
 package com.nnero.njson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * **********************************************
  * <p/>
@@ -13,12 +16,37 @@ package com.nnero.njson;
  */
 public class JSONArray {
 
-    /**
-     * 通过index获得json obj
-     * @param index
-     * @return
-     */
+    private List<Object> values;
+
+    public JSONArray(){
+        this.values = new ArrayList<Object>();
+    }
+
     public JSONObject getObj(int index){
-        return null;
+        Object o = values.get(index);
+        return o instanceof JSONObject ? (JSONObject)o : null;
+    }
+
+    public int getInt(int index){
+        Object o = values.get(index);
+        return o instanceof String ? Integer.parseInt((String)o) : -1;
+    }
+
+    public String getString(int index){
+        Object o = values.get(index);
+        return o instanceof String ? (String)o : null;
+    }
+
+    public boolean getBoolean(int index){
+        Object o = values.get(index);
+        return o instanceof String ? Boolean.valueOf((String) o) : false;
+    }
+
+    public int size(){
+        return values.size();
+    }
+
+    public void put(Object o){
+        values.add(o);
     }
 }

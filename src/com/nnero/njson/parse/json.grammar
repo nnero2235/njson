@@ -52,7 +52,7 @@ grammar:json
             ;
 
     boolean : TRUE
-            : FALSE
+            | FALSE
             ;
 
     booleans : boolean

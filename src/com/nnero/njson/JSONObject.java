@@ -16,10 +16,10 @@ import java.util.Map;
  */
 public class JSONObject {
 
-    private Map<String,String> map;
+    private Map<String,Object> map;
 
     public JSONObject(){
-        map = new HashMap<String, String>();
+        map = new HashMap<String, Object>();
     }
 
     /**
@@ -28,7 +28,8 @@ public class JSONObject {
      * @return
      */
     public JSONObject getJsonObj(String name){
-        return null;
+        Object o = checkNull(name);
+        return (JSONObject)o;
     }
 
     /**
@@ -37,7 +38,8 @@ public class JSONObject {
      * @return
      */
     public JSONArray getJsonArray(String name){
-        return null;
+        Object o = checkNull(name);
+        return o instanceof JSONArray ? (JSONArray)o : null;
     }
 
     /**
@@ -46,7 +48,8 @@ public class JSONObject {
      * @return
      */
     public String getString(String name){
-        return checkNull(name);
+        Object o = checkNull(name);
+        return (String) o;
     }
 
     /**
@@ -55,24 +58,34 @@ public class JSONObject {
      * @return
      */
     public int getInt(String name){
-        int value = Integer.parseInt(checkNull(name));
+        Object o = checkNull(name);
+        int value = Integer.parseInt((String) o);
         return value;
     }
 
+    /**
+     * 获得boolean值
+     * @param name
+     * @return
+     */
     public boolean getBoolean(String name){
-        boolean b = Boolean.valueOf(checkNull(name));
+        Object obj = checkNull(name);
+        boolean b = Boolean.valueOf((String) obj);
         return b;
     }
 
-    public void put(String name,String value){
+    public void put(String name,Object value){
         map.put(name,value);
     }
 
-    private String checkNull(String name){
-        if ("null".equals(map.get(name))){
+    private Object checkNull(String name){
+        Object o = map.get(name);
+        if (o == null){
+            return null;
+        } else if(o instanceof String && "null".equals(o)){
             return null;
         } else {
-            return map.get(name);
+            return o;
         }
     }
 }
